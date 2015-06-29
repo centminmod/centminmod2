@@ -1,15 +1,80 @@
-rerpm() {
-	if [[ -f "${DIR_TMP}/rpms/re2c/re2c-0.14.3-1.el7.x86_64.rpm" && "$CENTOS_SEVEN" = '7' ]]; then
-		echo
-		echo "rpm -Uvh ${DIR_TMP}/rpms/re2c/re2c-0.14.3-1.el7.x86_64.rpm"
-		rpm -Uvh ${DIR_TMP}/rpms/re2c/re2c-0.14.3-1.el7.x86_64.rpm
-	elif [[ -f "${DIR_TMP}/rpms/re2c/re2c-0.14.3-1.el6.x86_64.rpm" && "$CENTOS_SIX" = '6' ]]; then
-		# re2c 0.13.5 too old http://re2c.org/ on CentOS 6
-		echo
-		echo "rpm -Uvh ${DIR_TMP}/rpms/re2c/re2c-0.14.3-1.el6.x86_64.rpm"
-		rpm -Uvh ${DIR_TMP}/rpms/re2c/re2c-0.14.3-1.el6.x86_64.rpm
-	fi	
+#!/bin/bash
+######################################################
+# written by George Liu (eva2000) vbtechsupport.com
+# custom curl RPMs addon installer
+# use at own risk as it can break the system
+# info at http://mirror.city-fan.org/ftp/contrib/sysutils/Mirroring/
+######################################################
+# variables
+#############
+DT=`date +"%d%m%y-%H%M%S"`
+CENTMINLOGDIR='/root/centminlogs'
+DIR_TMP='/svr-setup'
+
+# custom curl/libcurl RPM for 7.43 and higher
+# enable with CUSTOM_CURLRPM=y
+# use at own risk as it can break the system
+# info at http://mirror.city-fan.org/ftp/contrib/sysutils/Mirroring/
+CUSTOM_CURLRPM=y
+CUSTOM_CURLRPMVER='7.43'             # custom curl/libcurl version
+CUSTOM_CURLLIBSSHVER='1.6.0-2.0'     # libssh2 version
+CUSTOM_CURLRPMCARESVER='1.10.0-5.0'  # c-ares version
+CUSTOM_CURLRPMSYSURL='http://mirror.city-fan.org/ftp/contrib/sysutils/Mirroring'
+CUSTOM_CURLRPMLIBURL='http://mirror.city-fan.org/ftp/contrib/libraries'
+###############################################################
+CENTOSVER=$(cat /etc/redhat-release | awk '{ print $3 }')
+
+if [ "$CENTOSVER" == 'release' ]; then
+    CENTOSVER=$(cat /etc/redhat-release | awk '{ print $4 }' | cut -d . -f1,2)
+    if [[ "$(cat /etc/redhat-release | awk '{ print $4 }' | cut -d . -f1)" = '7' ]]; then
+        CENTOS_SEVEN='7'
+    fi
+fi
+
+if [[ "$(cat /etc/redhat-release | awk '{ print $3 }' | cut -d . -f1)" = '6' ]]; then
+    CENTOS_SIX='6'
+fi
+
+if [ "$CENTOSVER" == 'Enterprise' ]; then
+    CENTOSVER=$(cat /etc/redhat-release | awk '{ print $7 }')
+    OLS='y'
+fi
+######################################################
+# Setup Colours
+black='\E[30;40m'
+red='\E[31;40m'
+green='\E[32;40m'
+yellow='\E[33;40m'
+blue='\E[34;40m'
+magenta='\E[35;40m'
+cyan='\E[36;40m'
+white='\E[37;40m'
+
+boldblack='\E[1;30;40m'
+boldred='\E[1;31;40m'
+boldgreen='\E[1;32;40m'
+boldyellow='\E[1;33;40m'
+boldblue='\E[1;34;40m'
+boldmagenta='\E[1;35;40m'
+boldcyan='\E[1;36;40m'
+boldwhite='\E[1;37;40m'
+
+Reset="tput sgr0"      #  Reset text attributes to normal
+                       #+ without clearing screen.
+
+cecho ()                     # Coloured-echo.
+                             # Argument $1 = message
+                             # Argument $2 = color
+{
+message=$1
+color=$2
+echo -e "$color$message" ; $Reset
+return
 }
+
+###########################################
+# functions
+#############
 
 curlrpm() {
 	if [[ "$CUSTOM_CURLRPM" = [yY] ]]; then
@@ -179,10 +244,18 @@ if [[ "$CENTOS_SEVEN" = '7' && "$(uname -m)" = 'x86_64' ]]; then
 fi
 	fi # CUSTOM_CURLRPM=y
 }
+##############################################################
+starttime=$(date +%s.%N)
+{
+curlrpm
 
-customrpms() {
-	echo
-	echo "custom RPM installs"
-	rerpm
-	curlrpm
-}
+echo
+cecho "custom curl RPMs installed..." $boldyellow
+} 2>&1 | tee ${CENTMINLOGDIR}/centminmod_customcurl_rpms_${DT}.log
+
+endtime=$(date +%s.%N)
+
+INSTALLTIME=$(echo "scale=2;$endtime - $starttime"|bc )
+echo "" >> ${CENTMINLOGDIR}/centminmod_customcurl_rpms_${DT}.log
+echo "Total Custom Curl RPMs Install Time: $INSTALLTIME seconds" >> ${CENTMINLOGDIR}/centminmod_customcurl_rpms_${DT}.log
+
