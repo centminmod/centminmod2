@@ -253,7 +253,7 @@ NGX_HTTPREDISLINKFILE="ngx_http_redis-${NGINX_HTTPREDISVER}.tar.gz"
 NGX_HTTPREDISLINK="http://people.freebsd.org/~osa/ngx_http_redis-${NGINX_HTTPREDISVER}.tar.gz"
 
 # wget renamed
-NGX_NCHANLINKFILE="ngx_chan-${NGINX_NCHANVER}.tar.gz"
+NGX_NCHANLINKFILE="ngx_nchan-${NGINX_NCHANVER}.tar.gz"
 NGX_NCHANLINK="https://github.com/slact/nchan/archive/v${NGINX_NCHANVER}.tar.gz"
 
 ##############
