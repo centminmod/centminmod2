@@ -324,7 +324,7 @@ if [[ "$CENTOS_SEVEN" = '7' || "$CENTOS_SIX" = '6' ]]; then
 
 	if [[ "$NGINX_NCHAN" = [yY] ]]; then
 		if [[ "$DYNAMIC_SUPPORT" = [yY] && "$NGXDYNAMIC_NCHAN" = [yY] ]]; then
-			NCHANOPT=" --add-dynamic-module../nchan-${NGINX_NCHANVER}"
+			NCHANOPT=" --add-dynamic-module=../nchan-${NGINX_NCHANVER}"
 			if [ -f /usr/local/nginx/conf/dynamic-modules.conf ]; then
 				echo "load_module \"modules/ngx_nchan_module.so\";" >> /usr/local/nginx/conf/dynamic-modules.conf
 			fi
