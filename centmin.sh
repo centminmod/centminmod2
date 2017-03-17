@@ -335,6 +335,7 @@ NGXDYNAMIC_NGXPAGESPEED='n'
 NGXDYNAMIC_BROTLI='y'
 NGXDYNAMIC_FANCYINDEX='y'
 NGXDYNAMIC_HIDELENGTH='y'
+NGXDYNAMIC_NCHAN='y'
 
 # set = y to put nginx, php and mariadb major version updates into 503 
 # maintenance mode https://community.centminmod.com/posts/26485/
@@ -355,6 +356,8 @@ NGINX_ZERODT='n'             # nginx zero downtime reloading on nginx upgrades
 NGINX_MAXERRBYTELIMIT='2048' # modify NGX_MAX_ERROR_STR hardcoded 2048 limit by editing value i.e. http://openresty-reference.readthedocs.io/en/latest/Lua_Nginx_API/#print
 NGINX_INSTALL='y'            # Install Nginx (Webserver)
 NGINX_DEBUG='n'              # Enable & reinstall Nginx debug log nginx.org/en/docs/debugging_log.html & wiki.nginx.org/Debugging
+NGINX_NCHAN='n'              # Enable nchan nginx module https://github.com/slact/nchan
+NGINX_NCHANVER='1.1.2'       # https://github.com/slact/nchan/releases
 NGINX_HTTP2='y'              # Nginx http/2 patch https://community.centminmod.com/threads/4127/
 NGINX_ZLIBNG='n'             # 64bit OS only for Nginx compiled against zlib-ng https://github.com/Dead2/zlib-ng
 NGINX_MODSECURITY='n'        # modsecurity module support https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#Installation_for_NGINX

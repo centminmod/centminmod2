@@ -1170,6 +1170,33 @@ else
 echo ""
     fi    
 
+        cecho "Download ${NGX_NCHANLINKFILE} ..." $boldyellow
+    if [ -s "${NGX_NCHANLINKFILE}" ]; then
+        cecho "ngx_nchan Archive found, skipping download..." $boldgreen
+    else
+        wget -c "${NGX_NCHANLINK}" -O "$NGX_NCHANLINKFILE" --tries=3
+ERROR=$?
+    if [[ "$ERROR" != '0' ]]; then
+    cecho "Error: ${NGX_NCHANLINKFILE} download failed." $boldgreen
+checklogdetails
+    exit #$ERROR
+else 
+         cecho "Download done." $boldyellow
+#echo ""
+    fi
+    fi
+
+tar xzf "${NGX_NCHANLINKFILE}"
+ERROR=$?
+    if [[ "$ERROR" != '0' ]]; then
+    cecho "Error: ${NGX_NCHANLINKFILE} extraction failed." $boldgreen
+checklogdetails
+    exit #$ERROR
+else 
+         cecho "${NGX_NCHANLINKFILE} valid file." $boldyellow
+echo ""
+    fi    
+
 nginxpcretarball
 nginxwebdavtarball
 nginxpgspeedtarball
