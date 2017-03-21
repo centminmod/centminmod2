@@ -1,3 +1,14 @@
+nchan_patch() {
+  if [[ "$NGINX_NCHAN" = [yY] && "NGINX_NCHANPATCH" = [yY] ]]; then
+    if [[ -d "$DIR_TMP/nchan-${NGINX_NCHANVER}" ]]; then
+      wget -O "$DIR_TMP/nchan-${NGINX_NCHANVER}/src/store/memory/nchan.patch" https://github.com/slact/nchan/commit/b7fde02d93c7fe9d9dd293821784fc4e9b6bab70.patch
+      pushd "$DIR_TMP/nchan-${NGINX_NCHANVER}/src/store/memory"
+      patch < nchan.patch
+      popd
+    fi
+  fi
+}
+
 ngxopenresty_patch() {
   if [ "$ngver" ]; then
     DETECT_NGXVER=$(awk '/define nginx_version  / {print $3}' "/svr-setup/nginx-$ngver/src/core/nginx.h")

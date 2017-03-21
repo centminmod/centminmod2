@@ -2376,6 +2376,11 @@ if [[ "$(gcc --version | head -n1 | awk '{print $3}' | cut -d . -f1-3 | sed "s|\
   fi
 fi
 
+# nchan patch
+if [[ "$NGINX_NCHAN" = [yY] && "NGINX_NCHANPATCH" = [yY] ]]; then
+	nchan_patch
+fi
+
 #    ASK "Would you like to compile nginx with IPv6 support? [y/n] "
 #    if [[ "$asknginxipv" = [yY] ]]; then
     if [[ "$NGXMODULE_ALTORDER" = [yY] ]]; then
